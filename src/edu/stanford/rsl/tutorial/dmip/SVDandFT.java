@@ -18,21 +18,42 @@ import ij.ImageJ;
 /**
  * 
  * Exercise 2 of Diagnostic Medical Image Processing (DMIP)
- * @author Marco Boegel
+ * @author Moritz Petry
  *
  */
 public class SVDandFT {
-/*	
+	
 	public static void invertSVD(SimpleMatrix A)
 	{
 		
 					
 		System.out.println("A = " + A.toString());
-		
-		//Compute the inverse of A without using inverse()				
-		//TODO 
+//		System.out.println("Determinante: " + A.determinant());
+//		
+//		//Compute the inverse of A without using inverse()				
+//		double det = A.determinant();
+//		
+//		SimpleMatrix Ainverse = new SimpleMatrix(3,3);
+//		Ainverse.zeros();
+//		SimpleVector vec = new SimpleVector(0,0,0);
+//		for (int j = 0; j < 3; j++) {
+//			vec.setElementValue(j, 1);
+//			
+//			for (int i = 0; i < 3; i++) {
+//				SimpleMatrix copy = new SimpleMatrix(A);
+//				copy.setColValue(i, vec);
+//				Ainverse.setElementValue(i, j, copy.determinant()/det);
+//			}
+//			
+//			vec.setElementValue(j, 0);
+//		}
+//		double cond = Ainverse.determinant() * A.determinant();
+//		System.out.println("Manual inverse: " + Ainverse.toString());
+//		System.out.println("Implemented inverse: " + A.inverse(InversionType.INVERT_QR));
+//		System.out.println("Condition number: " + cond);
 		
 		//Check output: re-compute A = U * S * V^T
+		DecompositionSVD svd = new DecompositionSVD(A);
 		SimpleMatrix temp = SimpleOperators.multiplyMatrixProd(svd.getU(), svd.getS());
 		SimpleMatrix A2 = SimpleOperators.multiplyMatrixProd(temp, svd.getV().transposed());
 		System.out.println("U * S * V^T: " + A2.toString());
@@ -45,9 +66,9 @@ public class SVDandFT {
 		int size = Math.min(Sinv.getCols(), Sinv.getRows());
 		SimpleVector SinvDiag = new SimpleVector( size);
 		
-		//TODO
-		//TODO
-		//TODO
+		for (int i = 0; i < size; i++) {
+			SinvDiag.setElementValue(i, 1./svd.getS().getElement(i, i));
+		}
 		
 		Sinv.setDiagValue(SinvDiag);
 		
@@ -62,7 +83,7 @@ public class SVDandFT {
 		System.out.println("A.inverse() = " + A.inverse(InversionType.INVERT_SVD));
 		
 		//Condition number
-		//TODO
+		double cond = Ainv.determinant() * A.determinant();
 		System.out.println("Cond(A) = " + cond);
 		
 		//introduce a rank deficiency
@@ -380,51 +401,51 @@ public class SVDandFT {
 		A.setRowValue(2, new SimpleVector(14, 13, -66));
 		
 		invertSVD(A);
-		optimizationProblem1(A, 1);
-		
-		//Data for problem 4 from lecture slides
-		double[] xCoords = new double[]{3.f, 2.f, 1.f, 0.f, -1.f, -1.f, -2.f};
-		double[] yCoords = new double[]{2.f, 1.f, 2.f, 0.f, 1.f, -1.f, -1.f};
-	
-		optimizationProblem4(xCoords, yCoords);
-		
-		
-		
-		// Data for problem 2 from lecture slides
-		SimpleMatrix vectors = new SimpleMatrix(2,4);
-		vectors.setColValue(0, new SimpleVector(1.f, 1.f));
-		vectors.setColValue(1, new SimpleVector(-1.f, 2.f));
-		vectors.setColValue(2, new SimpleVector(1.f, -3.f));
-		vectors.setColValue(3, new SimpleVector(-1.f, -4.f));
-		
-		optimizationProblem2(vectors);
-		
-		//Load an image from file
-		String filename = "D:/04_lectures/DMIP/exercises/2014/1/yu_fill.jpg";
-		Grid2D image = ImageUtil.wrapImagePlus(IJ.openImage(filename)).getSubGrid(0);
-		image.show();
-		
-		int rank = 100;		
-		optimizationProblem3(image, rank);
-		
-		
-		//Load Data for Fourier Transform exercise
-		//1. Start the ReconstructionPipelineFrame (src/apps/gui/)
-		//2. In the Pipeline window, go to edit configuration and press "center volume" and save
-		//3. In the ImageJ window, navigate to Plugins->CONRAD->Create Numerical Phantom
-		//4. Choose Metric Volume Phantom
-		//5. Choose Shepp Logan Phantom
-		//6. Save the resulting volume. In the ImageJ window, File-Save As->Tiff...
-		
-		String filenameShepp = "D:/04_lectures/DMIP/exercises/2014/1/shepplogan.tif";
-		Grid3D sheppLoganVolume = ImageUtil.wrapImagePlus(IJ.openImage(filenameShepp));
-		//To work with a 2-D image, select slice 160
-		Grid2D sheppLoganImage = sheppLoganVolume.getSubGrid(160);
-		sheppLoganImage.show();
-		fourierExercise(sheppLoganImage);
+//		optimizationProblem1(A, 1);
+//		
+//		//Data for problem 4 from lecture slides
+//		double[] xCoords = new double[]{3.f, 2.f, 1.f, 0.f, -1.f, -1.f, -2.f};
+//		double[] yCoords = new double[]{2.f, 1.f, 2.f, 0.f, 1.f, -1.f, -1.f};
+//	
+//		optimizationProblem4(xCoords, yCoords);
+//		
+//		
+//		
+//		// Data for problem 2 from lecture slides
+//		SimpleMatrix vectors = new SimpleMatrix(2,4);
+//		vectors.setColValue(0, new SimpleVector(1.f, 1.f));
+//		vectors.setColValue(1, new SimpleVector(-1.f, 2.f));
+//		vectors.setColValue(2, new SimpleVector(1.f, -3.f));
+//		vectors.setColValue(3, new SimpleVector(-1.f, -4.f));
+//		
+//		optimizationProblem2(vectors);
+//		
+//		//Load an image from file
+//		String filename = "D:/04_lectures/DMIP/exercises/2014/1/yu_fill.jpg";
+//		Grid2D image = ImageUtil.wrapImagePlus(IJ.openImage(filename)).getSubGrid(0);
+//		image.show();
+//		
+//		int rank = 100;		
+//		optimizationProblem3(image, rank);
+//		
+//		
+//		//Load Data for Fourier Transform exercise
+//		//1. Start the ReconstructionPipelineFrame (src/apps/gui/)
+//		//2. In the Pipeline window, go to edit configuration and press "center volume" and save
+//		//3. In the ImageJ window, navigate to Plugins->CONRAD->Create Numerical Phantom
+//		//4. Choose Metric Volume Phantom
+//		//5. Choose Shepp Logan Phantom
+//		//6. Save the resulting volume. In the ImageJ window, File-Save As->Tiff...
+//		
+//		String filenameShepp = "D:/04_lectures/DMIP/exercises/2014/1/shepplogan.tif";
+//		Grid3D sheppLoganVolume = ImageUtil.wrapImagePlus(IJ.openImage(filenameShepp));
+//		//To work with a 2-D image, select slice 160
+//		Grid2D sheppLoganImage = sheppLoganVolume.getSubGrid(160);
+//		sheppLoganImage.show();
+//		fourierExercise(sheppLoganImage);
 		
 		
 
 	}
-*/
+
 }

@@ -18,7 +18,7 @@ import ij.process.FloatProcessor;
 /**
  * Introduction to the CONRAD Framework
  * Exercise 1 of Diagnostic Medical Image Processing (DMIP)
- * @author Marco Boegel
+ * @author Moritz Petry
  *
  */
 
@@ -62,7 +62,7 @@ public class Intro {
 		
 		
 		//Load an image from file
-		String filename = "/proj/i5dmip/vu80mimu/Reconstruction/CONRAD/src/edu/stanford/rsl/tutorial/dmip/mr12.dcm";
+		String filename = "/proj/i5dmip/ji77toka/Reconstruction/CONRAD/src/edu/stanford/rsl/tutorial/dmip/mr12.dcm";
 		//TODO. Hint: Use IJ and ImageUtil
 		Grid2D mrImage = ImageUtil.wrapImagePlus(IJ.openImage(filename)).getSubGrid(0);
 		mrImage.show();
@@ -189,7 +189,7 @@ public class Intro {
 		
 		//Matrix elementwise multiplication
 		SimpleMatrix MSquaredElem = SimpleOperators.multiplyElementWise(M,M);
-		//System.out.println("M squared Elements: " + MsquaredElem.toString());
+		System.out.println("M squared Elements: " + MSquaredElem.toString());
 		
 		//round vectors
 		SimpleVector vRandCopy = new SimpleVector(vRand);
@@ -246,9 +246,9 @@ public class Intro {
 		System.out.println("Condition number of A: " + svd.cond() );
 		
 		//Re-compute A = U * S * V^T
-		//SimpleMatrix temp = SimpleOperators.multiplyMatrixProd(svd.getU(), svd.getS());
-		//SimpleMatrix A2 = SimpleOperators.multiplyMatrixProd(temp, svd.getV().transposed());
-		//System.out.println("U * S * V^T: " + A2.toString());
+		SimpleMatrix temp = SimpleOperators.multiplyMatrixProd(svd.getU(), svd.getS());
+		SimpleMatrix A2 = SimpleOperators.multiplyMatrixProd(temp, svd.getV().transposed());
+		System.out.println("U * S * V^T: " + A2.toString());
 		
 	}
 
